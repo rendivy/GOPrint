@@ -1,181 +1,106 @@
-## Проект по разработке мобильного приложения
-### Данный проект создан в рамках 7-го модуля обучения Высшей-IT Школы:
+# GOPrint
+Android app for visual programming. A program is built from blocks on an infinite canvas and executed by a built-in
+interpreter.
 
-- [Янгель Юрием](https://github.com/rendivy)
+Team project of the Higher IT School, module 7. Authors: [@rendivy](https://github.com/rendivy),
+[@StaZisS](https://github.com/StaZisS), [@kubavsop](https://github.com/kubavsop).
 
-- [Довыденко Гордеем](https://github.com/StaZisS)
+## Features
+- Blocks are placed on an infinite canvas and connected with links;
+- The interpreter uses dynamic typing. Expressions are converted to reverse Polish notation before evaluation;
+- Control flow: `if` / `endif`, `while`, `for`, `break`, `continue`;
+- User functions: function block, end of function block, call function block;
+- Console output with the `print` block;
+- Debugger with breakpoints and step-by-step execution.
 
-- [Журавлёвым Максимом](https://github.com/kubavsop)
+## Requirements
+- JDK 17 or higher;
+- Android SDK with API level 33 (`compileSdk 33`);
+- Device or emulator with Android 7.1 (API 25) or higher (`minSdk 25`).
 
-## Использованные технологии:
+The project uses Gradle 8.0 (wrapper), AGP 8.0.0 and Kotlin 1.7.20.
 
-- [Jetpack Compose UI App Development Toolkit](https://developer.android.com/jetpack/compose)
-- [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
-- [Accompanist](https://github.com/google/accompanist)
+## Build
+```shell
+git clone https://github.com/rendivy/GOPrint.git
+cd GOPrint
+./gradlew :app:assembleDebug
+```
 
+The APK is written to `app/build/outputs/apk/debug/app-debug.apk`. To build and install it on a connected device, run:
 
+```shell
+./gradlew :app:installDebug
+```
 
-# Руководство пользователя
-## Типы данных которые поддерживаются компилятором
-<table>
-    <tr>
-        <th>Тип данных</th>
-        <th>Как задать</th>
-    </tr>
-    <tr>
-        <td>Array</td>
-        <td>*name_array[size_array]</td>
-    </tr>
-    <tr>
-        <td>String</td>
-        <td>"your_string"</td>
-    </tr>
-    <tr>
-        <td>Int</td>
-        <td>123</td>
-    </tr>
-     <tr>
-        <td>Double</td>
-        <td>123.6</td>
-    </tr>
-     <tr>
-        <td>Boolean</td>
-        <td>true/false</td>
-    </tr>
-</table>
+## Data types
+| Type | How to set |
+|---|---|
+| `Int` | `123` |
+| `Double` | `123.6` |
+| `Boolean` | `true` / `false` |
+| `String` | `"your_string"` |
+| `Array` | `*name_array[size_array]` |
 
-## Так же поддерживается приведение типов
+### Type conversion
+| Method | Applies to | Returns |
+|---|---|---|
+| `variable.toInt()` | `Boolean`, `Int`, `Double`, `String` | `Int` |
+| `variable.toDouble()` | `Boolean`, `Int`, `Double`, `String` | `Double` |
+| `variable.toBool()` | `Boolean`, `Int`, `Double`, `String`, `Array` | `Boolean` |
+| `variable.toString()` | `Array` | `String` |
+| `variable.toList()` | `String` | `Array` |
 
-<table>
-    <tr>
-        <th>Типы данных которые поддерживают приведение</th>
-        <th>Метод</th>
-        <th>Возвращаемый тип</th>
-    </tr>
-    <tr>
-        <td>Boolean, Int, Double, String</td>
-        <td>variable.toInt()</td>
-        <td>Int</td>
-    </tr>
-    <tr>
-        <td>Boolean, Int, Double, String</td>
-        <td>variable.toDouble()</td>
-        <td>Double</td>
-    </tr>
-    <tr>
-        <td>Boolean, Int, Double, String, Array</td>
-        <td>variable.toBool()</td>
-        <td>Boolean</td>
-    </tr>
-    <tr>
-        <td>Array</td>
-        <td>variable.toString()</td>
-        <td>String</td>
-    </tr>
-    <tr>
-        <td>String</td>
-        <td>variable.toList()</td>
-        <td>Array</td>
-    </tr>
-   
-</table>
+### Built-in functions
+| Function | Argument types | Returns |
+|---|---|---|
+| `abs(variable)` | `Int`, `Double` | `Int`, `Double` |
+| `exp(variable)` | `Int`, `Double` | `Double` |
+| `ceil(variable)` | `Int`, `Double` | `Int` |
+| `floor(variable)` | `Int`, `Double` | `Int` |
+| `len(variable)` | `Array`, `String` | `Int` |
+| `sorted(variable)` | `Array` | `Array` |
 
-## Функции которые поддерживаются компилятором
+`Array` also has the `.sort()` method.
 
-<table>
-    <tr>
-        <th>Функция</th>
-        <th>Типы переменных поддерживаемые функцией</th>
-        <th>Возвращаемый тип</th>
-    </tr>
-    <tr>
-        <td>abs(variable)</td>
-        <td>Int, Double</td>
-        <td>Int, Double</td>
-    </tr>
-    <tr>
-        <td>exp(variable)</td>
-        <td>Int, Double</td>
-        <td>Double</td>
-    </tr>
-    <tr>
-        <td>ceil(variable)</td>
-        <td>Int, Double</td>
-        <td>Int</td>
-    </tr>
-    <tr>
-        <td>floor(variable)</td>
-        <td>Int, Double</td>
-        <td>Int</td>
-    </tr>
-    <tr>
-        <td>len(variable)</td>
-        <td>Array, String</td>
-        <td>Int</td>
-    </tr>
-    <tr>
-        <td>sorted(variable)</td>
-        <td>Array</td>
-        <td>Array</td>
-    </tr>
-</table>
+## Blocks
+- **Initialization** - creates a variable. Variables are dynamically typed, so an initial value is required;
+- **Set** - changes the value of a variable;
+- **Get value** - reads a value;
+- **Call function** - calls a function that returns no value;
+- **If** / **Endif** - the Endif block is created together with If. It is optional and limits the scope.
 
-### Так же у Array есть метод .sort()
+| Initialization | Set | Get value | Call function | Endif |
+|---|---|---|---|---|
+| <img src="app/src/main/java/com/example/android_blueprint/image/initialization.png" width="150"> | <img src="app/src/main/java/com/example/android_blueprint/image/set.png" width="150"> | <img src="app/src/main/java/com/example/android_blueprint/image/get_value.png" width="150"> | <img src="app/src/main/java/com/example/android_blueprint/image/call_function.png" width="150"> | <img src="app/src/main/java/com/example/android_blueprint/image/endif.png" width="150"> |
 
+### Operators
+Binary operators: `+`, `-`, `×`, `÷`, `%`, `pow`, `log`, `==`, `!=`, `>`, `>=`, `<`, `<=`.
+The top input of a binary operator block is the left operand, the bottom input is the right operand:
+`top operator bottom`.
 
-## Работа с debug
+- `log` - the top input is the argument, the bottom input is the base;
+- `pow` - the top input is the number, the bottom input is the exponent.
 
-### В нашем приложении реализована работа с отладчиком, для проверки и отладки выполняемых блоков.
-#### Поставить breakpoint - точку остановки, вы можете только на блоки с главным потоком данных, после компиляции приложения, вы сможете проверяеть шаг за шагом все выполнимые действия в блоках, либо переходить к другому оставленному breakpoint'у. 
+Unary operators: `abs`, `not`, `sin`, `cos`, `tg`, `ctg`, `arcsin`, `arccos`, `arctg`, `arcctg`.
 
+<img src="app/src/main/java/com/example/android_blueprint/image/binary_operator.png" width="300">
 
-![](https://github.com/rendivy/GOPrint/blob/master/app/src/main/java/com/example/android_blueprint/image/debug_gif.gif)
+## Data flows
+Blocks communicate through two flows:
+- main flow - defines the execution order;
+- variable flow - passes values between blocks.
 
-## Блоки
+## Debugger
+Breakpoints can be set **only on main flow blocks**. After the program is compiled, you can step through the executed
+blocks one by one or continue to the next breakpoint.
 
-### В нашем приложении используется динамическая типизация данных, поэтому при создании переменной ей необходимо указать значение в блоке Initialization.
+<img src="app/src/main/java/com/example/android_blueprint/image/debug_gif.gif" width="300">
 
-<p>
-<img src="app/src/main/java/com/example/android_blueprint/image/initialization.png">
-</p>
+## License
+[MIT](LICENSE)
 
-### Чтобы изменить значение переменнойя, необходимо использовать блок Set.
-
-<p>
-<img src="app/src/main/java/com/example/android_blueprint/image/set.png">
-</p>
-
-### Для получения какого-либо значения используется блок Get value.
-
-<p>
-<img src="app/src/main/java/com/example/android_blueprint/image/get_value.png">
-</p>
-
-### Если функция не возвращает значений, то её следует вызывать с помощью блока Call function.
-
-<p>
-<img src="app/src/main/java/com/example/android_blueprint/image/call_function.png">
-</p>
-
-### Блок Endif появляется вместе с созданием блока If, он не обязателен, но служит для ограничения области видимости.
-
-<p>
-<img src="app/src/main/java/com/example/android_blueprint/image/endif.png">
-</p>
-
-### Работа с бинарными операторами происходит следующим образом: верхний оператор является левым, а нижний правым, т.е topPin operator bottomPin
-
-<p>
-<img src="app/src/main/java/com/example/android_blueprint/image/binary_operator.png">
-</p>
-
-#### Примечание
-    - У блока логарифма верхний коннектор - подлогорифмическое выражение, а нижний основание
-    - У блока возведения в степень верхний коннектор - число, а нижний степень
-
-
-## Потоки данных
-
-### Блоки используют потоки данных для комуникации между собой. Есть два потока данных так называемый основной поток и так же есть поток для переменных. Основной поток используется для определения приоритета.
-
-
+## Feedback
+To ask a question, suggest a feature or report a bug, create an [issue](https://github.com/rendivy/GOPrint/issues).
+Describe your question or suggestion in the "Description" field.
+If you report a bug, add the steps to reproduce it.
